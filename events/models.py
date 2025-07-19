@@ -15,7 +15,7 @@ class Event(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    strat_date_time = models.DateTimeField()
+    date_time = models.DateTimeField()
     mode = models.CharField(max_length=10, choices=[('online', 'Online'), ('offline', 'Offline')])
     location_or_link = models.CharField(max_length=255)
     provider = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to provider user

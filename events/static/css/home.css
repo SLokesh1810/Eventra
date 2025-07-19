@@ -20,13 +20,31 @@ p {
   background-color: #c3b1e1;
   padding: 1rem 2rem;
   box-shadow: 0 4px 8px rgba(215, 195, 213, 0.8);
-  position: relative;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .left-nav {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex: 1;
+}
+
+.center-nav {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 2rem;
+  flex: 2;
+}
+
+.right-nav {
+  display: flex;
+  justify-content: flex-end;
+  list-style: none;
+  gap: 1.5rem;
+  flex: 1;
 }
 
 .menu-icon {
@@ -41,13 +59,17 @@ p {
   color: #420282;
 }
 
-.nav-links {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  list-style: none;
-  gap: 2rem;
+.logout {
+  background-color: transparent;
+  color: #4b4b6f;
+  border: none;
+  font-size: 15px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.logout:hover {
+  color: #f7f7fc;
 }
 
 .nav-links li a {
@@ -60,9 +82,10 @@ p {
   color: #f7f7fc;
 }
 
+/* Sidebar */
 .dashboard {
   position: fixed;
-  top: 70px;
+  top: 90px;
   left: -220px;
   width: 200px;
   height: calc(100% - 70px);

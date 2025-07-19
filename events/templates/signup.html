@@ -11,10 +11,12 @@
     <div class="container">
         <h2>Create your Account</h2>
         <form method="post">
+            {% csrf_token %}
+            {{ form }}
             <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password1" placeholder="Password" required>
-            <input type="password" name="password2" placeholder="Confirm Password" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="password1" placeholder="Confirm Password" required>
             <label for="role">Select Role:</label>
             <select id="role" name="role" required>
                 <option value="participant">Participant</option>

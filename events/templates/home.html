@@ -12,16 +12,34 @@
 <body>
 
   <nav class="navbar">
+    <!-- Left -->
     <div class="left-nav">
       <div class="menu-icon" onclick="toggleDashboard()">&#9776;</div>
       <div class="logo">Eventra</div>
     </div>
-    <ul class="nav-links">
+
+    <!-- Center -->
+    <ul class="nav-links center-nav">
       <li><a href="#">Home</a></li>
       <li><a href="#">About</a></li>
+    </ul>
+
+    <!-- Right -->
+    <ul class="nav-links right-nav">
+      {% if user.is_authenticated %}
+      <li><span style="color:white;">Hi, {{ user.username }}</span></li>
+      <li>
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="logout">Logout</button>
+        </form>
+      </li>
+      {% else %}
       <li><a href="{% url 'login' %}">Login</a></li>
       <li><a href="{% url 'signup' %}">Sign Up</a></li>
+      {% endif %}
     </ul>
+
   </nav>
 
   <div id="dashboard" class="dashboard">
@@ -34,7 +52,6 @@
       <li>Approvals</li>
     </ul>
   </div>
-
 
   <main class="main-content">
     <h1>Welcome to Eventra</h1>
