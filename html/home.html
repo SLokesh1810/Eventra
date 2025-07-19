@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eventra - Home</title>
   <link rel="stylesheet" href="../css/home.css" />
 </head>
+
 <body>
+  <nav class="navbar">
+    <div class="left-nav">
+      <div class="menu-icon" onclick="toggleDashboard()">&#9776;</div>
+      <div class="logo">Eventra</div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="{% url 'login' %}">Login</a></li>
+      <li><a href="{% url 'signup' %}">Sign Up</a></li>
+    </ul>
+  </nav>
 
-    <nav class="navbar">
-  <div class="left-nav">
-    <div class="menu-icon" onclick="toggleDashboard()">&#9776;</div>
-    <div class="logo">Eventra</div>
+  <div id="dashboard" class="dashboard">
+    <h3>Dashboard</h3>
+    <ul>
+      <li>Upcoming Events</li>
+      <li>Live Events</li>
+      <li>Profile</li>
+      <li>Create</li>
+      <li>Approvals</li>
+    </ul>
   </div>
-  <ul class="nav-links">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">About</a></li>
-    <li><a href="login.html">Login</a></li>
-    <li><a href="#">Create</a></li>
-  </ul>
-</nav>
-
-<div id="dashboard" class="dashboard">
-  <h3>Dashboard</h3>
-  <ul>
-    <li>Upcoming Events</li>
-    <li>Live Events</li>
-    <li>Profile</li>
-    <li>Approvals</li>
-  </ul>
-</div>
 
 
   <main class="main-content">
@@ -39,4 +41,5 @@
 
   <script src="../js/home.js"></script>
 </body>
+
 </html>
