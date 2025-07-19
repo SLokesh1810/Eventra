@@ -13,8 +13,9 @@ def index(request):
         user = User.objects.get(email=email)
         prof, _ = profile.objects.get_or_create(user=user)
 
-        upcoming_events = Event.objects.filter(date__gte=datetime.now(), is_approved=True).order_by('date', 'start_time')
-        return render(request, 'home.html', {'role': prof.role, 'user': user})
+        upcoming_events = Event.objects.filter(last_date_for_reg__gte=datetime.now(), is_approved=True)
+        live_events = Event.objects.filter(date=datetime.now(), is_approved=True)
+        return render(request, 'home.html', {'role': prof.role, 'user': user, 'upcoming_events': upcoming_events, 'live_events': live_events})
     
     return render(request, 'home.html')
 

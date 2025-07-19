@@ -46,8 +46,8 @@
     <div id="dashboard" class="dashboard">
         <h3>Dashboard</h3>
         <ul>
-            <li>Upcoming Events</li>
-            <li>Live Events</li>
+            <li id="upcoming_events" class="active-tab" onclick="switchTab('upcoming')">Upcoming Events</li>
+            <li id="live_events" onclick="switchTab('live')">Live Events</li>
             {% if role == 'participant' %}
             <li>Profile</li>
             {% elif role == 'organiser' %}
