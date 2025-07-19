@@ -54,15 +54,32 @@
             <li>Profile</li>
             <li>Create</li>
             {% elif role == 'admin' %}
-            <li><a href="{% url 'approval' %}">Approvals</a></li>
+            <li><a style="text-decoration: none; color: black;" href="{% url 'approval' %}">Approvals</a></li>
             {% endif %}
         </ul>
     </div>
     {% block content %}
     {% endblock %}
 
-    <script src="{% static 'js/home.js' %}"></script>
+    <script>
+        function switchTab(tab) {
+            window.location.href = "{% url 'index' %}";
+            document.getElementById('upcoming_events').classList.remove('active-tab');
+            document.getElementById('live_events').classList.remove('active-tab');
 
+            document.getElementById('upcoming_tab').style.display = 'none';
+            document.getElementById('live_tab').style.display = 'none';
+
+            if (tab === 'upcoming') {
+                document.getElementById('upcoming_events').classList.add('active-tab');
+                document.getElementById('upcoming_tab').style.display = 'block';
+            } else {
+                document.getElementById('live_events').classList.add('active-tab');
+                document.getElementById('live_tab').style.display = 'block';
+            }
+        }
+    </script>
+    <script src="{% static 'js/home.js' %}"></script>
 </body>
 
 </html>

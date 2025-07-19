@@ -109,10 +109,40 @@ p {
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
-  color: black;
 }
 
 .dashboard ul li:hover {
   background-color: #8f70db;
   color: white;
+}
+
+.event-tabs {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding: 0;
+  margin-top: 30px;
+  border-bottom: 2px solid #ddd;
+}
+
+.event-tabs li {
+  padding: 12px 20px;
+  cursor: pointer;
+  color: #555;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+
+.active-tab {
+  color: white;
+  background-color: #8f70db;
+}
+
+.event-container {
+  padding: 20px;
+  text-align: center;
+  align-self: right;
+  font-size: 18px;
 }
