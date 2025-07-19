@@ -17,6 +17,7 @@ class Event(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     date = models.DateField(null=True, blank=True)
+    last_date_for_reg = models.DateField(null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
     timeAlloted = models.IntegerField(default=60)
     fee = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)

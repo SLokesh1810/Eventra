@@ -12,7 +12,10 @@ def index(request):
         email = request.user.email
         user = User.objects.get(email=email)
         prof, _ = profile.objects.get_or_create(user=user)
+
+        upcoming_events = Event.objects.filter(date__gte=datetime.now(), is_approved=True).order_by('date', 'start_time')
         return render(request, 'home.html', {'role': prof.role, 'user': user})
+    
     return render(request, 'home.html')
 
 # Login view
