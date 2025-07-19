@@ -3,4 +3,10 @@ from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Welcome to the Events page!")
+    return render(request, 'templates/home.html')
+
+def login(request):
+    return render(request, 'templates/login.html')
+
+def signup(request):
+    return render(request, 'templates/signup.html')

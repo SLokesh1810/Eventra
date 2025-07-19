@@ -15,7 +15,7 @@ class Event(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    date_time = models.DateTimeField()
+    strat_date_time = models.DateTimeField()
     mode = models.CharField(max_length=10, choices=[('online', 'Online'), ('offline', 'Offline')])
     location_or_link = models.CharField(max_length=255)
     provider = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to provider user
@@ -40,7 +40,6 @@ class Participant(models.Model):
 class organizersWaiting(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
 
     def __str__(self):
         return f"Waiting: {self.user.username} for {self.event.title}"
