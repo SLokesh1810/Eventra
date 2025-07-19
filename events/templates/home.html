@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +20,7 @@
       <li><a href="#">Home</a></li>
       <li><a href="#">About</a></li>
       <li><a href="{% url 'login' %}">Login</a></li>
-      <li><a href="#">Create</a></li>
+      <li><a href="{% url 'signup' %}">Sign Up</a></li>
     </ul>
   </nav>
 
@@ -29,6 +30,7 @@
       <li>Upcoming Events</li>
       <li>Live Events</li>
       <li>Profile</li>
+      <li>Create</li>
       <li>Approvals</li>
     </ul>
   </div>
@@ -39,7 +41,7 @@
     <p>Your one-stop platform for events and courses.</p>
   </main>
 
-  <script src="../js/home.js"></script>
+  <script src="{% static 'js/home.js' %}"></script>
 </body>
 
 </html>
