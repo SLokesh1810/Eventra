@@ -3,9 +3,17 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import profile
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
+    if request.user.is_authenticated:
+        email = request.user.email
+        user = User.objects.get(email=email)
+        prof,_ = profile.objects.get_or_create(user=user)
+        return render(request, 'home.html', {'role': prof.role, 'user': user})
+        
+    
     return render(request, 'home.html')
 
 def login_view(request):
@@ -61,4 +69,32 @@ def signup_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+def approval_view(request):
+    prof,_ = profile.objects.get_or_create(user=request.user)
+    if prof.role == 'admin':
+        users = User.objects.filter(profile__role='organiser', profile__is_approved=False)
+        return render(request, 'approval.html', {'users': users})
+    else:
+        return HttpResponse("You are not authorized to view this page.")
+    
+def approve_users(request):
+    if request.method == 'POST':
+        pending_profiles = profile.objects.filter(is_approved=False, role='organiser')
+
+        for prof in pending_profiles:
+            user_id = prof.user.id
+            decision = request.POST.get(f'approval_{user_id}', 'reject')  # Default is reject
+
+            if decision == 'approve':
+                prof.is_approved = True
+                prof.role = 'organiser'
+            else:
+                prof.is_approved = False
+
+            prof.is_organiser_pending = False
+            prof.save()
+
+        messages.success(request, "Decisions submitted successfully.")
+        return redirect('index')
 

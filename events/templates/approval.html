@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/approval.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Pending Organiser Approvals</h2>
+
+    {% if users %}
+    <form method="post" action="{% url 'approve_users' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Approval</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <div class="switch-container">
+                        <span class="reject-label">Reject</span>
+                        <label class="switch-label">
+                            <input type="checkbox" name="approval_{{ user.id }}" value="approve">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="approve-label">Approve</span>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button type="submit" class="submit-btn">Submit Decisions</button>
+    </form>
+    {% else %}
+    <p>No pending organiser approvals.</p>
+    {% endif %}
+</div>
+{% endblock %}

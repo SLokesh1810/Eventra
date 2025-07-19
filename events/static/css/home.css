@@ -31,14 +31,6 @@ p {
   flex: 1;
 }
 
-.center-nav {
-  display: flex;
-  justify-content: center;
-  list-style: none;
-  gap: 2rem;
-  flex: 2;
-}
-
 .right-nav {
   display: flex;
   justify-content: flex-end;

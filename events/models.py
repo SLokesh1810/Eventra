@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=20, choices=(('participant','Participant'),('organiser','Organiser'),))
+    role = models.CharField(max_length=20, choices=(('participant','Participant'),('organiser','Organiser'),('admin','Admin')))
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
@@ -16,6 +16,8 @@ class Event(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     date_time = models.DateTimeField()
+    fee = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    image = models.ImageField(upload_to='event_images/', blank=True, null=True)
     mode = models.CharField(max_length=10, choices=[('online', 'Online'), ('offline', 'Offline')])
     location_or_link = models.CharField(max_length=255)
     provider = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to provider user

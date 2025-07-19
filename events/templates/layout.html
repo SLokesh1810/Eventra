@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eventra</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    {% block styles %}
+    {% endblock %}
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <!-- Left -->
+        <div class="left-nav">
+            <div class="menu-icon" onclick="toggleDashboard()">&#9776;</div>
+            <div class="logo">Eventra</div>
+        </div>
+
+        <!-- Right -->
+        <ul class="nav-links right-nav">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="">About</a></li>
+            <li><a href="">Help</a></li>
+            {% if user.is_authenticated %}
+            <li><span style="color:white;">Hi, {{ user.username }}</span></li>
+            <li>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout">Logout</button>
+                </form>
+            </li>
+            {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            {% endif %}
+        </ul>
+
+    </nav>
+
+    <div id="dashboard" class="dashboard">
+        <h3>Dashboard</h3>
+        <ul>
+            <li>Upcoming Events</li>
+            <li>Live Events</li>
+            {% if role == 'participant' %}
+            <li>Profile</li>
+            {% elif role == 'organiser' %}
+            <li>Profile</li>
+            <li>Create</li>
+            {% elif role == 'admin' %}
+            <li><a href="{% url 'approval' %}">Approvals</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    {% block content %}
+    {% endblock %}
+
+    <script src="{% static 'js/home.js' %}"></script>
+
+</body>
+
+</html>

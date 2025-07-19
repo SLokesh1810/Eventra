@@ -1,64 +1,11 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'layout.html' %}
+{% block styles %}
+{% endblock %}
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eventra - Home</title>
-  <link rel="stylesheet" href="{% static 'css/home.css' %}" />
-</head>
+{% block content %}
+<main class="main-content">
+  <h1>Welcome to Eventra</h1>
+  <p>Your one-stop platform for events and courses.</p>
+</main>
 
-<body>
-
-  <nav class="navbar">
-    <!-- Left -->
-    <div class="left-nav">
-      <div class="menu-icon" onclick="toggleDashboard()">&#9776;</div>
-      <div class="logo">Eventra</div>
-    </div>
-
-    <!-- Center -->
-    <ul class="nav-links center-nav">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-
-    <!-- Right -->
-    <ul class="nav-links right-nav">
-      {% if user.is_authenticated %}
-      <li><span style="color:white;">Hi, {{ user.username }}</span></li>
-      <li>
-        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit" class="logout">Logout</button>
-        </form>
-      </li>
-      {% else %}
-      <li><a href="{% url 'login' %}">Login</a></li>
-      <li><a href="{% url 'signup' %}">Sign Up</a></li>
-      {% endif %}
-    </ul>
-
-  </nav>
-
-  <div id="dashboard" class="dashboard">
-    <h3>Dashboard</h3>
-    <ul>
-      <li>Upcoming Events</li>
-      <li>Live Events</li>
-      <li>Profile</li>
-      <li>Create</li>
-      <li>Approvals</li>
-    </ul>
-  </div>
-
-  <main class="main-content">
-    <h1>Welcome to Eventra</h1>
-    <p>Your one-stop platform for events and courses.</p>
-  </main>
-
-  <script src="{% static 'js/home.js' %}"></script>
-</body>
-
-</html>
+{% endblock %}
