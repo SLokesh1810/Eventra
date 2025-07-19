@@ -4,7 +4,7 @@
 
 <head>
     <title>Eventra Signup</title>
-    <link rel="stylesheet" href="{% static 'css/signup.css' %}">=
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
 </head>
 
 <body>
@@ -23,6 +23,9 @@
                 <option value="organiser">Organiser</option>
             </select>
             <br><br>
+            {% if error %}
+            <span class="error">*{{ error }}</span>
+            {% endif %}
             <button type="submit">Sign Up</button>
         </form>
         <div class="text">

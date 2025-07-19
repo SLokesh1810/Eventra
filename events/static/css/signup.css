@@ -27,17 +27,18 @@ form {
     flex-direction: column;
 }
 
-input, select {
-  padding: 12px;
-  margin-bottom: 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  transition: border 0.3s;
-  font-family: 'Segoe UI', sans-serif;  /* Match input font */
-  font-size: 1rem;                      /* Same font size */
-  color: #4b4b4b;                       /* Optional: match input text color */
-  background-color: #fff;              /* Optional: match background */
-  appearance: none;                    /* Remove default arrow (optional, cross-browser) */
+input,
+select {
+    padding: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    transition: border 0.3s;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    color: #4b4b4b;
+    background-color: #fff;
+    appearance: none;
 }
 
 
@@ -67,7 +68,21 @@ button:hover {
     font-size: 0.9rem;
     color: #6b7280;
 }
+
+#role {
+    margin-top: 0.8rem;
+}
+
 a {
     color: #141114;
     text-decoration: none;
+}
+
+.error {
+    color: red;
+    font-size: 1rem;
+    text-align: center;
+    align-self: center;
+    margin: auto;
+    margin-bottom: 10px;
 }

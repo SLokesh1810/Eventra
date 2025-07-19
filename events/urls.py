@@ -8,5 +8,5 @@ urlpatterns = [
     path('signup/', views.signup_view, name="signup"),
     path('logout/', LogoutView.as_view(next_page='index'), name='logout'),
     path('approval/', views.approval_view, name='approval'),
-    path('approve_users/', views.approve_users, name='approve_users'),
+    path('approve_all/', views.approve_all, name='approve_all'),
 ]
