@@ -1,0 +1,79 @@
+body {
+    background-color: #f3e8ff;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #2f1847;
+}
+
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+h1 {
+    text-align: center;
+    color: #6b21a8;
+    margin-bottom: 2rem;
+}
+
+/* Reusing existing card style */
+.event-card {
+    background-color: #ffffff;
+    border-left: 6px solid #b57fe6;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(181, 127, 230, 0.3);
+}
+
+label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 500;
+    color: #4b2673;
+}
+
+input[type="text"],
+input[type="datetime-local"],
+input[type="url"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border: 1px solid #d1c1f1;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fdfbff;
+    transition: border 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #b57fe6;
+    box-shadow: 0 0 6px rgba(181, 127, 230, 0.3);
+}
+
+.register-btn {
+    display: inline-block;
+    background-color: #b57fe6;
+    color: white;
+    text-decoration: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 10px rgba(181, 127, 230, 0.4);
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+}
+
+.register-btn:hover {
+    background-color: #a368d9;
+    box-shadow: 0 6px 14px rgba(181, 127, 230, 0.5);
+}

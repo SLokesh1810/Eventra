@@ -5,7 +5,45 @@
 {% endblock %}
 
 {% block content %}
-<p>This is the page for creating new events.</p>
+<head>
+    <meta charset="UTF-8">
+    <title>Create Event - Eventra</title>
+    <link rel="stylesheet" href="../css/events.css">
+</head>
+    <div class="container">
+        <h1>Create a New Event</h1>
+
+        <div class="event-card">
+            <form method="post">
+                {% csrf_token %}
+
+                <label for="title"><strong>Event Title</strong></label>
+                <input type="text" id="title" name="title" placeholder="Enter event title" required>
+
+                <label for="description"><strong>Description</strong></label>
+                <textarea id="description" name="description" placeholder="Enter event description" rows="4" required></textarea>
+
+                <label for="start_datetime"><strong>Start Date & Time</strong></label>
+                <input type="datetime-local" id="start_datetime" name="start_datetime" required>
+
+                <label for="mode"><strong>Mode</strong></label>
+                <select id="mode" name="mode" required>
+                    <option value="" disabled selected>Select mode</option>
+                    <option value="Online">Online</option>
+                    <option value="Offline">Offline</option>
+                </select>
+
+                <label for="location"><strong>Location</strong></label>
+                <input type="text" id="location" name="location" placeholder="Enter location or online platform" required>
+
+                <label for="registration_link"><strong>Registration Link</strong></label>
+                <input type="url" id="registration_link" name="registration_link" placeholder="Enter registration URL" required>
+
+                <button type="submit" class="register-btn">Create Event</button>
+            </form>
+        </div>
+    </div>
+
 <script>
     document.getElementById('upcoming_events').classList.remove('active-tab');
     document.getElementById('live_events').classList.remove('active-tab');
