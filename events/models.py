@@ -18,6 +18,7 @@ class Event(models.Model):
     team_capacity = models.IntegerField(default=1)
     date = models.DateField(null=True, blank=True)
     last_date_for_reg = models.DateField(null=True, blank=True)
+    event_type = models.CharField(max_length=50, choices=[('workshop', 'Workshop'), ('competition', 'Competition')],default='workshop')
     start_time = models.TimeField(null=True, blank=True)
     timeAlloted = models.IntegerField(default=60)
     fee = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)

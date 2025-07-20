@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -99,28 +99,37 @@ def create_event_view(request):
             return redirect('index')
 
         try:
-            event_name = request.POST.get('event_name')
-            event_description = request.POST.get('event_description')
-            team_capacity = request.POST.get('team_capacity', 1)
-            event_date = request.POST.get('event_date')
-            event_start_time = request.POST.get('event_start_time')
+            event_name = request.POST.get('evnet_name')  # typo in form name
+            event_description = request.POST.get('description')
+            team_capacity = int(request.POST.get('team_capacity'))
+            event_type = request.POST.get('event_type')
             event_fee = request.POST.get('event_fee', 0.00)
             event_mode = request.POST.get('event_mode')
-            event_location_or_link = request.POST.get('event_location_or_link')
-            duration_minutes = request.POST.get('event_duration', 60)
-            event_image = request.FILES.get('event_image')
+            event_location_or_link = request.POST.get('event_location')
+            duration_minutes = int(request.POST.get('event_duration', 60))
 
-            event_datetime = datetime.fromisoformat(event_date)
+            # Fix: Fetch and parse datetimes
+            start_datetime_str = request.POST.get('start_datetime')
+            end_datetime_str = request.POST.get('end_datetime')
+            last_date_str = request.POST.get('last_date_for_reg')
+
+            if not start_datetime_str or not end_datetime_str or not last_date_str:
+                raise ValueError("Date and time fields must not be empty.")
+
+            start_datetime = datetime.fromisoformat(start_datetime_str)
+            end_datetime = datetime.fromisoformat(end_datetime_str)
+            last_date_for_reg = datetime.fromisoformat(last_date_str)
 
             event = Event.objects.create(
                 title=event_name,
                 description=event_description,
-                team_capacity=team_capacity, 
-                date=event_datetime,
-                start_time=event_start_time,
-                duration=duration_minutes,
+                team_capacity=team_capacity,
+                date=start_datetime,
+                event_type=event_type,
+                last_date_for_reg=last_date_for_reg,
+                start_time=start_datetime,
+                timeAlloted=duration_minutes,
                 fee=event_fee,
-                image=event_image,
                 mode=event_mode,
                 location_or_link=event_location_or_link,
                 provider=request.user,
@@ -128,6 +137,7 @@ def create_event_view(request):
             )
 
             event.save()
+
             messages.success(request, "Event created successfully and sent for approval.")
             return redirect('index')
 
@@ -136,6 +146,7 @@ def create_event_view(request):
             return redirect('create_event')
 
     return render(request, 'create_event.html')
+
 
 # View for admin approval dashboard
 def approval_view(request):
@@ -175,36 +186,39 @@ def approve_all(request):
         messages.success(request, "All approvals submitted successfully.")
         return redirect('approval')
 
+
 def register_event_view(request, event_id):
     if not request.user.is_authenticated:
         messages.error(request, "You must be logged in to register for events.")
         return redirect('login')
 
-    try:
-        event = Event.objects.get(id=event_id)
-        if not event.is_approved:
-            messages.error(request, "This event is not approved yet.")
-            return redirect('index')
+    event = get_object_or_404(Event, id=event_id)
 
-        if request.method == 'POST':
-            team_name = request.POST.get('team_name')
-            team_members = request.POST.get('team_members', '')
-
-            registration = Registration.objects.create(
-                user=request.user,
-                event=event,
-                team_name=team_name,
-                team_members=team_members
-            )
-            registration.save()
-            messages.success(request, "Successfully registered for the event.")
-            return redirect('index')
-
-        return render(request, 'register_event.html', {'event': event})
-
-    except Event.DoesNotExist:
-        messages.error(request, "Event does not exist.")
+    if not event.is_approved:
+        messages.error(request, "This event is not approved yet.")
         return redirect('index')
+
+    if request.method == 'POST':
+        team_name = request.POST.get('team_name')
+        team_members = request.POST.get('team_members', '')
+
+        # Optional: Check if the user is already registered
+        if Registration.objects.filter(user=request.user, event=event).exists():
+            messages.warning(request, "You have already registered for this event.")
+            return redirect('index')
+
+        Registration.objects.create(
+            user=request.user,
+            event=event,
+            team_name=team_name,
+            team_members=team_members
+        )
+
+        messages.success(request, "Successfully registered for the event.")
+        return redirect('index')
+
+    return render(request, 'register_events.html', {'event': event})
+
 
 def profile_view_participant(request):
     if not request.user.is_authenticated:

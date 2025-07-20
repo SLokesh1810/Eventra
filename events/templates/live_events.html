@@ -2,27 +2,36 @@
 {% load static %}
 
 {% block styles %}
+<link rel="stylesheet" href="{% static 'css/events.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="event-card">
-        <h1>Live Events</h1>
-            <h2>TechSpark 2025</h2>
-            <p class="description">An engaging tech symposium with workshops, competitions, and keynote speakers from top tech companies.</p>
-            <div class="event-details">
-                <p><strong>Start Date & Time:</strong> July 28, 2025 – 10:00 AM</p>
-                <p><strong>Mode:</strong> Offline</p>
-                <p><strong>Location:</strong> Anna University, Chennai</p>
-            </div>
-            <a href="{% url 'register_events' %}" class="register-btn">Register</a>
+<div class="container">
+    <h1 style="text-align:center;">Live Events</h1>
+
+    {% if live_events %}
+    {% for event in live_events %}
+    <div class="event-card">
+        <h2>{{ event.name }}</h2>
+        <p class="description">{{ event.description }}</p>
+        <div class="event-details">
+            <p><strong>Start Date & Time:</strong> {{ event.date }} – {{ event.time }}</p>
+            <p><strong>Mode:</strong> {{ event.mode }}</p>
+            <p><strong>Location:</strong> {{ event.venue }}</p>
         </div>
+        <a href="{% url 'register_events' event.id %}" class="register-btn">Register</a>
     </div>
+    {% endfor %}
+    {% else %}
+    <p style="text-align:center;">No live events right now.</p>
+    {% endif %}
+</div>
 
 <script>
-    document.getElementById('upcoming_events').classList.remove('active-tab');
-    document.getElementById('live_events').classList.add('active-tab');
-    document.getElementById('profile_org').classList.remove('active-tab');
-    document.getElementById('create_events').classList.remove('active-tab');
-    document.getElementById('profile_part').classList.remove('active-tab');
+    document.getElementById('upcoming_events')?.classList.remove('active-tab');
+    document.getElementById('live_events')?.classList.add('active-tab');
+    document.getElementById('profile_org')?.classList.remove('active-tab');
+    document.getElementById('create_events')?.classList.remove('active-tab');
+    document.getElementById('profile_part')?.classList.remove('active-tab');
 </script>
 {% endblock %}

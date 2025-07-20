@@ -35,9 +35,7 @@ label {
     color: #4b2673;
 }
 
-input[type="text"],
-input[type="datetime-local"],
-input[type="url"],
+input,
 select,
 textarea {
     width: 100%;
