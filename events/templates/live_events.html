@@ -5,7 +5,18 @@
 {% endblock %}
 
 {% block content %}
-<p>This is the page for displaying live events.</p>
+<div class="event-card">
+        <h1>Live Events</h1>
+            <h2>TechSpark 2025</h2>
+            <p class="description">An engaging tech symposium with workshops, competitions, and keynote speakers from top tech companies.</p>
+            <div class="event-details">
+                <p><strong>Start Date & Time:</strong> July 28, 2025 – 10:00 AM</p>
+                <p><strong>Mode:</strong> Offline</p>
+                <p><strong>Location:</strong> Anna University, Chennai</p>
+            </div>
+            <a href="{% url 'register_events' %}" class="register-btn">Register</a>
+        </div>
+    </div>
 
 <script>
     document.getElementById('upcoming_events').classList.remove('active-tab');
