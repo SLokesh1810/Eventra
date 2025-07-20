@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Event,profile,Participant
+from .models import Event,profile,Registration
 
 # Register your models here.
 admin.site.register(Event)
-admin.site.register(Participant)
+admin.site.register(Registration)
 admin.site.register(profile)

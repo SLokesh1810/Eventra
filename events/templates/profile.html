@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h2>{{ user.username|title }}'s Profile</h2>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Role:</strong> {{ profile.role|title }}</p>
+    </div>
+
+    {% if profile.role == 'participant' %}
+    <div class="section">
+        <h3>Your Event Registrations</h3>
+        {% if registrations %}
+        <ul class="card-list">
+            {% for r in registrations %}
+            <li class="card">
+                <h4>{{ r.event.title }}</h4>
+                <p>Date: {{ r.event.date_time }}</p>
+                <p>Status: {{ r.status|default:"Pending" }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No event registrations yet.</p>
+        {% endif %}
+    </div>
+    {% elif profile.role == 'organiser' %}
+    <div class="section">
+        <h3>Your Organised Events</h3>
+        {% if events %}
+        <ul class="card-list">
+            {% for event in events %}
+            <li class="card">
+                <h4>{{ event.title }}</h4>
+                <p>Date: {{ event.date_time }}</p>
+                <p>Location: {{ event.location|default:"TBD" }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>You haven't created any events yet.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+<script>
+    document.getElementById('upcoming_events').classList.remove('active-tab');
+    document.getElementById('live_events').classList.remove('active-tab');
+    document.getElementById('profile_org').classList.add('active-tab');
+    document.getElementById('create_events').classList.remove('active-tab');
+    document.getElementById('profile_part').classList.add('active-tab');
+</script>

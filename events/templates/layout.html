@@ -24,7 +24,7 @@
 
         <!-- Right -->
         <ul class="nav-links right-nav">
-            <li><a href="{% url 'index' %}">Home</a></li>
+            <li id="home"><a href="{% url 'index' %}">Home</a></li>
             <li><a href="">About</a></li>
             <li><a href="">Help</a></li>
             {% if user.is_authenticated %}
@@ -46,39 +46,26 @@
     <div id="dashboard" class="dashboard">
         <h3>Dashboard</h3>
         <ul>
-            <li id="upcoming_events" class="active-tab" onclick="switchTab('upcoming')">Upcoming Events</li>
-            <li id="live_events" onclick="switchTab('live')">Live Events</li>
+            <li id="upcoming_events"><a style="text-decoration: none; color: black;"
+                    href="{% url 'upcoming_events' %}">Upcoming Events</a></li>
+            <li id="live_events"><a style="text-decoration: none; color: black;" href="{% url 'live_events' %}">Live
+                    Events</a></li>
             {% if role == 'participant' %}
-            <li>Profile</li>
+            <li id="profile_part"><a style="text-decoration: none; color: black;"
+                    href="{% url 'profile_participant' %}">Profile</a></li>
             {% elif role == 'organiser' %}
-            <li>Profile</li>
-            <li>Create</li>
+            <li id="profile_org"><a style="text-decoration: none; color: black;"
+                    href="{% url 'profile_org' %}">Profile</a></li>
+            <li id="create_events"><a style="text-decoration: none; color: black;"
+                    href="{% url 'create_event' %}">Create</a></li>
             {% elif role == 'admin' %}
-            <li><a style="text-decoration: none; color: black;" href="{% url 'approval' %}">Approvals</a></li>
+            <li id="approval"><a style="text-decoration: none; color: black;" href="{% url 'approval' %}">Approvals</a>
+            </li>
             {% endif %}
         </ul>
     </div>
     {% block content %}
     {% endblock %}
-
-    <script>
-        function switchTab(tab) {
-            window.location.href = "{% url 'index' %}";
-            document.getElementById('upcoming_events').classList.remove('active-tab');
-            document.getElementById('live_events').classList.remove('active-tab');
-
-            document.getElementById('upcoming_tab').style.display = 'none';
-            document.getElementById('live_tab').style.display = 'none';
-
-            if (tab === 'upcoming') {
-                document.getElementById('upcoming_events').classList.add('active-tab');
-                document.getElementById('upcoming_tab').style.display = 'block';
-            } else {
-                document.getElementById('live_events').classList.add('active-tab');
-                document.getElementById('live_tab').style.display = 'block';
-            }
-        }
-    </script>
     <script src="{% static 'js/home.js' %}"></script>
 </body>
 

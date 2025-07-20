@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from .models import profile, Event
+from .models import profile, Event, Registration
 from django.contrib import messages
 from datetime import datetime
 
@@ -13,11 +13,31 @@ def index(request):
         user = User.objects.get(email=email)
         prof, _ = profile.objects.get_or_create(user=user)
 
-        upcoming_events = Event.objects.filter(last_date_for_reg__gte=datetime.now(), is_approved=True)
-        live_events = Event.objects.filter(date=datetime.now(), is_approved=True)
-        return render(request, 'home.html', {'role': prof.role, 'user': user, 'upcoming_events': upcoming_events, 'live_events': live_events})
+        return render(request, 'home.html', {'role': prof.role, 'user': user})
     
     return render(request, 'home.html')
+
+def upcoming_events_view(request):
+    if request.user.is_authenticated:
+        email = request.user.email
+        user = User.objects.get(email=email)
+        prof, _ = profile.objects.get_or_create(user=user)
+
+        upcoming_events = Event.objects.filter(last_date_for_reg__gte=datetime.now(), is_approved=True)
+        return render(request, 'upcoming_events.html', {'role': prof.role, 'user': user, 'upcoming_events': upcoming_events})
+    
+    return redirect('login')
+
+def live_events_view(request):
+    if request.user.is_authenticated:
+        email = request.user.email
+        user = User.objects.get(email=email)
+        prof, _ = profile.objects.get_or_create(user=user)
+
+        live_events = Event.objects.filter(date=datetime.now(), is_approved=True)
+        return render(request, 'live_events.html', {'role': prof.role, 'user': user, 'live_events': live_events})
+    
+    return redirect('login')
 
 # Login view
 def login_view(request):
@@ -81,6 +101,7 @@ def create_event_view(request):
         try:
             event_name = request.POST.get('event_name')
             event_description = request.POST.get('event_description')
+            team_capacity = request.POST.get('team_capacity', 1)
             event_date = request.POST.get('event_date')
             event_start_time = request.POST.get('event_start_time')
             event_fee = request.POST.get('event_fee', 0.00)
@@ -94,6 +115,7 @@ def create_event_view(request):
             event = Event.objects.create(
                 title=event_name,
                 description=event_description,
+                team_capacity=team_capacity, 
                 date=event_datetime,
                 start_time=event_start_time,
                 duration=duration_minutes,
@@ -105,6 +127,7 @@ def create_event_view(request):
                 is_approved=False
             )
 
+            event.save()
             messages.success(request, "Event created successfully and sent for approval.")
             return redirect('index')
 
@@ -120,7 +143,7 @@ def approval_view(request):
     if prof.role == 'admin':
         users = User.objects.filter(profile__role='organiser', profile__is_approved=False)
         events = Event.objects.filter(is_approved=False)
-        return render(request, 'approval.html', {'users': users, 'events': events})
+        return render(request, 'approval.html', {'users': users, 'events': events,'role' : prof.role})
     else:
         return HttpResponse("You are not authorized to view this page.")
 
@@ -151,3 +174,61 @@ def approve_all(request):
 
         messages.success(request, "All approvals submitted successfully.")
         return redirect('approval')
+
+def register_event_view(request, event_id):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to register for events.")
+        return redirect('login')
+
+    try:
+        event = Event.objects.get(id=event_id)
+        if not event.is_approved:
+            messages.error(request, "This event is not approved yet.")
+            return redirect('index')
+
+        if request.method == 'POST':
+            team_name = request.POST.get('team_name')
+            team_members = request.POST.get('team_members', '')
+
+            registration = Registration.objects.create(
+                user=request.user,
+                event=event,
+                team_name=team_name,
+                team_members=team_members
+            )
+            registration.save()
+            messages.success(request, "Successfully registered for the event.")
+            return redirect('index')
+
+        return render(request, 'register_event.html', {'event': event})
+
+    except Event.DoesNotExist:
+        messages.error(request, "Event does not exist.")
+        return redirect('index')
+
+def profile_view_participant(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to view your profile.")
+        return redirect('login')
+
+    user = request.user
+    prof, _ = profile.objects.get_or_create(user=user)
+
+    if prof.role == 'participant':
+        registrations = Registration.objects.filter(user=user)
+    
+
+    return render(request, 'profile.html', {'user': user, 'profile': prof, 'registrations': registrations})
+
+def profile_view_organiser(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to view your profile.")
+        return redirect('login')
+
+    user = request.user
+    prof, _ = profile.objects.get_or_create(user=user)
+
+    if prof.role == 'organiser':
+        events = Event.objects.filter(provider=user)
+
+    return render(request, 'profile.html', {'user': user, 'profile': prof, 'events': events})
