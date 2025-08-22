@@ -7,51 +7,47 @@
 
 {% block content %}
 <div class="containerForApproval">
-    <form method="POST" action="{% url 'approve_all' %}">
-        {% csrf_token %}
 
-        <h2>Pending Organiser Approvals</h2>
-        {% if users %}
-        {% for user in users %}
-        <div class="switch-container">
-            <span><strong>{{ user.username }}</strong> ({{ user.email }})</span>
+    <h2>Pending Organiser Approvals</h2>
+    {% if users %}
+    {% for user in users %}
+    <div class="switch-container">
+        <span><strong>{{ user.username }}</strong> ({{ user.email }})</span>
+        <form method="POST" action="{% url 'approve_all' %}">
+            {% csrf_token %}
             <label class="switch-label">
-                <input type="checkbox" name="approval_{{ user.id }}" value="approve" />
-                <span class="slider"></span>
+                <button type="submit" name="approval_user_{{ user.id }}" value="approve">Approve</button>
+                <button type="submit" name="reject_user_{{ user.id }}" value="reject">Reject</button>
             </label>
-            <span class="approve-label">Approve</span>
-            <span class="reject-label">Reject</span>
-        </div>
-        <input type="hidden" name="approval_{{ user.id }}_present" value="1" />
-        {% endfor %}
-        {% else %}
-        <p>No pending organisers.</p>
-        {% endif %}
+        </form>
+    </div>
+    <input type="hidden" name="approval_{{ user.id }}_present" value="1" />
+    {% endfor %}
+    {% else %}
+    <p>No pending organisers.</p>
+    {% endif %}
 
-        <h2>Pending Event Approvals</h2>
-        {% if events %}
-        {% for event in events %}
-        <div class="switch-container">
-            <span><strong>{{ event.title }}</strong> ({{ event.date_time }})</span>
+    <h2>Pending Event Approvals</h2>
+    {% if events %}
+    {% for event in events %}
+    <div class="switch-container">
+        <span><strong>{{ event.title }}</strong> ({{ event.date_time }})</span>
+        <form method="POST" action="{% url 'approve_all' %}">
+            {% csrf_token %}
             <label class="switch-label">
-                <input type="checkbox" name="event_approval_{{ event.id }}" value="approve" />
-                <span class="slider"></span>
+                <button type="submit" name="approval_event_{{ event.id }}" value="approve">Approve</button>
+                <button type="submit" name="reject_event_{{ event.id }}" value="reject">Reject</button>
             </label>
-            <span class="approve-label">Approve</span>
-            <span class="reject-label">Reject</span>
-        </div>
+        </form>
         <input type="hidden" name="event_approval_{{ event.id }}_present" value="1" />
         {% endfor %}
         {% else %}
         <p>No pending events.</p>
         {% endif %}
-
-        <button type="submit" class="submit-btn">Submit All Approvals</button>
-    </form>
-</div>
-<script>
-    document.getElementById('upcoming_events').classList.remove('active-tab');
-    document.getElementById('live_events').classList.remove('active-tab');
-    document.getElementById('approval').classList.add('active-tab');
-</script>
-{% endblock %}
+    </div>
+    <script>
+        document.getElementById('upcoming_events').classList.remove('active-tab');
+        document.getElementById('live_events').classList.remove('active-tab');
+        document.getElementById('approval').classList.add('active-tab');
+    </script>
+    {% endblock %}

@@ -161,29 +161,27 @@ def approval_view(request):
 def approve_all(request):
     if request.method == 'POST':
         # Handle organiser approvals
-        pending_profiles = profile.objects.filter(is_approved=False, role='organiser')
-        for prof in pending_profiles:
-            user_id = prof.user.id
-            decision = request.POST.get(f'approval_{user_id}')
-            if decision == 'approve':
-                prof.is_approved = True
-            else:
-                prof.is_approved = False
-            prof.is_organiser_pending = False
-            prof.save()
+        for key, value in request.POST.items():
+            if key.startswith("approval_user_"):
+                user_id = key.split("_")[-1]
+                try:
+                    prof = profile.objects.get(user_id=user_id, role="organiser")
+                    prof.is_approved = (value == "approve")
+                    prof.is_organiser_pending = False
+                    prof.save()
+                except profile.DoesNotExist:
+                    continue
 
-        # Handle event approvals
-        pending_events = Event.objects.filter(is_approved=False)
-        for event in pending_events:
-            event_id = event.id
-            decision = request.POST.get(f'event_approval_{event_id}')
-            if decision == 'approve':
-                event.is_approved = True
-            else:
-                event.is_approved = False
-            event.save()
+            # Handle event approvals
+            elif key.startswith("approval_event_"):
+                event_id = key.split("_")[-1]
+                try:
+                    event = Event.objects.get(id=event_id)
+                    event.is_approved = (value == "approve")
+                    event.save()
+                except Event.DoesNotExist:
+                    continue
 
-        messages.success(request, "All approvals submitted successfully.")
         return redirect('approval')
 
 
@@ -218,6 +216,27 @@ def register_event_view(request, event_id):
         return redirect('index')
 
     return render(request, 'register_events.html', {'event': event})
+
+def particitpant_view(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You must be logged in to view this page.")
+        return redirect('login')
+
+    user = request.user
+    prof, _ = profile.objects.get_or_create(user=user)
+
+    if prof.role == 'organiser' or prof.role == 'admin':
+        event = request.GET.get('event')
+        if event:
+            event = get_object_or_404(Event, id=event)
+            registrations = Registration.objects.filter(event=event)
+            return render(request, 'participant_view.html', {'event': event, 'registrations': registrations, 'user': user, 'profile': prof})
+        else:
+            messages.error(request, "No event specified.")
+            return redirect('index')
+    else:
+        messages.error(request, "You are not authorized to view this page.")
+        return redirect('index')
 
 
 def profile_view_participant(request):
